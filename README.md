@@ -89,12 +89,21 @@ This shows a simple combination of routes:
 (defroutes api
   ('GET "/api/get-status" (rootes-http:html-ok "All systems go.")))
 
-(makeapp `(,(webapp)
-          ,(api)))
+(makeapp
+  (list (webapp)
+        (api)))
 ```
 
 There are several ways in which one may choose to combine routes for an app; the
-above example is just one. Another is to compose them:
+above example shows the list constructor approach; the literal data approach is
+an obvious alternative:
+
+```lfe
+(makeapp `(,(webapp)
+           ,(api)))
+```
+
+Another option open to developers is to compose the routes:
 
 ```lfe
 (makeapp (api (webapp)))
@@ -105,7 +114,7 @@ use one of the threshing macros:
 
 ```lfe
 (makeapp (-> (webapp)
-            (api)))
+             (api)))
 ```
             
 ### REST Service Example
