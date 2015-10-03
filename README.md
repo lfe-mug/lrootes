@@ -89,7 +89,7 @@ This shows a simple combination of routes:
 (defroutes api
   ('GET "/api/get-status" (rootes-http:html-ok "All systems go.")))
 
-(defapp `(,(webapp)
+(makeapp `(,(webapp)
           ,(api)))
 ```
 
@@ -97,14 +97,14 @@ There are several ways in which one may choose to combine routes for an app; the
 above example is just one. Another is to compose them:
 
 ```lfe
-(defapp (api (webapp)))
+(makeapp (api (webapp)))
 ```
 
 Or, if you're familiar with Clojure and enjoy using the LFE clj library, you can
 use one of the threshing macros:
 
 ```lfe
-(defapp (-> (webapp)
+(makeapp (-> (webapp)
             (api)))
 ```
             
@@ -113,7 +113,7 @@ use one of the threshing macros:
 ```lfe
 (include-lib "lrootes/include/routing.lfe")
 
-(defroutes
+(defroutes order-api
   ;; top-level
   ('GET "/"
     (lfest-html-resp:ok "Welcome to the Volvo Store!"))
@@ -140,6 +140,8 @@ use one of the threshing macros:
     (lfest-json-resp:method-not-allowed))
   ('NOTFOUND
     (lfest-json-resp:not-found "Bad path: invalid operation.")))
+
+(makeapp (order-api))
 ```
 
 
@@ -190,10 +192,10 @@ Notes for new library [this will be converted to content once implementation is 
   ``iolist`` of the routes defined by the function.
 * When called with 1 argument, that argument must be another routes
   function or function that will return an ``iolist`` of routes
-* To be usable by YAWS, the ``(defapp ...)`` macro must be called in the
+* To be usable by YAWS, the ``(makeapp ...)`` macro must be called in the
   module that is specified in the YAWS configuration with an ``appmods``
   directive
-* The ``(defapp ...)`` macro defines the ``out/1`` function which YAWS
+* The ``(makeapp ...)`` macro defines the ``out/1`` function which YAWS
   requires application modules to provide
 
 
