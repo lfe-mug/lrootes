@@ -1,27 +1,26 @@
-# lrootes [![Build Status](https://travis-ci.org/lfex/lfest.png?branch=master)](https://travis-ci.org/lfex/lfest)
+# lrootes [![Build Status](https://travis-ci.org/lfex/lrootes.png?branch=master)](https://travis-ci.org/lfex/lrootes)
 
 <img src="resources/images/lrootes-x250.png"/>
 
-*Macros and functions for creating and composing routes for LFE YAWS web apps*
+*Macros and functions for creating, combining, and composing routes for LFE YAWS web apps*
 
 
-Introduction
-============
+## Introduction
 
-REST is a party, and you know it.
+Inspired by Clojure's [Compojure](https://github.com/weavejester/compojure)
+and based on the original LFE-YAWS routing
+work done in the [lfest](https://github.com/lfex/lfest) project, lrootes
+improves upon its predecessor by focusing on route combination.
 
-The name started with more than just a party reference: the intent was for
-this library to be used to develop RESTful services more easily by having
-one's routes more clear: LFe rEpresentational State Transfer.
+lrootes accomplishes this by ensuring that routes are simply functions which
+return [iolists](http://erlang.org/doc/reference_manual/typespec.html#id77856)
+of data structures. The data strcutures represent an HTTP-verb+URL dispatch.
+This allows lrootes routes to be composed (since they are functions) and keeps
+the inner workings simple (because it's just ``iolist``s of tuples).
 
-But the web is more than REST, so everybody gets to play. The name's staying,
-though.
+## Dependencies
 
-
-Dependencies
-------------
-
-This project assumes that you have [rebar](https://github.com/rebar/rebar)
+This project assumes that you have Erlang, [rebar](https://github.com/rebar/rebar),
 and [lfetool]() installed somwhere in your ``$PATH``.
 
 This project depends upon the following, which are automatically installed
@@ -29,11 +28,10 @@ to the ``deps`` directory of this project when you run ``make compile``:
 
 * [LFE](https://github.com/rvirding/lfe) - Lisp Flavored Erlang; needed to
   compile
-* [YAWS]() - needed for the header file
+* [YAWS](http://yaws.hyber.org/) - needed for an Erlang header file
 
 
-Installation
-============
+## Installation
 
 Just add it to your ``rebar.config`` deps:
 
@@ -41,12 +39,12 @@ Just add it to your ``rebar.config`` deps:
 
 {deps, [
     ...
-    {lfest, ".*", {git, "git@github.com:lfex/lfest.git", "master"}}
+    {lrootes, ".*", {git, "git@github.com:oubiwann/lrootes.git", "master"}}
   ]}.
 ```
 
 If you have created your project with ``lfetool``, you can download
-``lfeest`` with the following:
+``lrootes`` with the following:
 
 ```bash
 $ make get-deps
@@ -59,14 +57,61 @@ $ make compile
 ```
 
 
-Usage
-=====
+## Usage
 
-Create your application/service routes with the ``(defroutes ...)`` form.
-Here is an example:
+### Simple Example
 
-```cl
-(include-lib "deps/lfest/include/macros.lfe")
+This shows bare minimum usage:
+
+```lfe
+(include-lib "lrootes/include/routing.lfe")
+
+(defroutes webapp
+  ('GET "/hello/world" (rootes-http:html-ok "Hello, World"))
+  ('NOTFOUND
+    (rootes-http:html-not-found "Page Not Found")))
+
+(defapp (webapp))
+```
+
+### Combination Example
+
+This shows a simple combination of routes:
+
+```lfe
+(include-lib "lrootes/include/routing.lfe")
+
+(defroutes webapp
+  ('GET "/hello/world" (rootes-http:html-ok "Hello, World"))
+  ('NOTFOUND
+    (rootes-http:html-not-found "Page Not Found")))
+
+(defroutes api
+  ('GET "/api/get-status" (rootes-http:html-ok "All systems go.")))
+
+(defapp `(,(webapp)
+          ,(api)))
+```
+
+There are several ways in which one may choose to combine routes for an app; the
+above example is just one. Another is to compose them:
+
+```lfe
+(defapp (api (webapp)))
+```
+
+Or, if you're familiar with Clojure and enjoy using the LFE clj library, you can
+use one of the threshing macros:
+
+```lfe
+(defapp (-> (webapp)
+            (api)))
+```
+            
+### REST Service Example
+
+```lfe
+(include-lib "lrootes/include/routing.lfe")
 
 (defroutes
   ;; top-level
@@ -97,8 +142,29 @@ Here is an example:
     (lfest-json-resp:not-found "Bad path: invalid operation.")))
 ```
 
-Note that this creates the ``routes/3`` function which can then be called
-in the ``out/1`` function.
+
+
+### YAWS Auth Example
+
+With LFE releases 1.10.x and higher, you can define multiple modules in a
+single file, thus allowing you to provide multiple ``appmods`` in a single
+module. We can take advantage of this to succinctly define ``appmods`` that
+are protected and those that are publicly accessible.
+
+```lfe
+TBD
+```
+
+### grACL Fine-grained Access Example
+
+```lfe
+TBD
+```
+
+## Concepts
+
+
+### How It Works
 
 A few important things to note here:
 
@@ -116,9 +182,22 @@ A few important things to note here:
   path segments, with the ``":varname"`` segments converted to ``varname``/
   variable segments), and then the ``arg-data`` variable from YAWS.
 
+Notes for new library [this will be converted to content once implementation is done]:
 
-Concepts
-========
+* ``(defroutes ...)`` - deines a named function
+* The routes function can take 0 or 1 arguments
+* When called with zero arguments, the routes function will return an
+  ``iolist`` of the routes defined by the function.
+* When called with 1 argument, that argument must be another routes
+  function or function that will return an ``iolist`` of routes
+* To be usable by YAWS, the ``(defapp ...)`` macro must be called in the
+  module that is specified in the YAWS configuration with an ``appmods``
+  directive
+* The ``(defapp ...)`` macro defines the ``out/1`` function which YAWS
+  requires application modules to provide
+
+
+### Behind the Scenes
 
 lfest needs to provide YAWS with an ``out/1`` function. The location of this
 function is configured in your ``etc/yaws.conf`` file in the
