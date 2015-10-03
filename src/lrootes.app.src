@@ -1,11 +1,11 @@
 %% -*- erlang -*-
-{application, lfest,
+{application, lrootes,
  [
   %% A quick description of the application.
-  {description, "Macros and functions for routing apps and services in LFE+Yaws"},
+  {description, "Macros and functions for creating, combining, and composing routes for LFE YAWS web apps"},
 
   %% The version of the application
-  {vsn, "0.2.0"},
+  {vsn, "0.1.0"},
 
   %% All modules used by the application.
   {modules,
