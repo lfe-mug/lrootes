@@ -1,14 +1,10 @@
-(defmodule lfest
+(defmodule rootes-yaws
   (export all))
 
 (include-lib "yaws/include/yaws_api.hrl")
 
 (defun parse-path (arg-data)
   (string:tokens (get-path-info arg-data) "/"))
-
-(defun make-header (key value)
-  "Makes a header tuple in the format required by YAWS."
-  `#(header #(,key ,value)))
 
 (defun get-http-method (arg-data)
   "Extract the HTTP method from the reqeust data."
