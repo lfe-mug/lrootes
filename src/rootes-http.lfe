@@ -1,5 +1,184 @@
-(defmodule lfest-codes
+(defmodule rootes-http
   (export all))
+
+;;; HTTP Headers
+
+(defun make-header (key value)
+  "Makes a header tuple in the format required by YAWS."
+  `#(header #(,key ,value)))
+
+;;; YAWS HTTP Raw Response Functions
+
+(defun content (content-type content)
+  "Makes a content tuple in the format required by YAWS."
+  `#(content ,content-type ,content))
+
+(defun response (status-code content)
+  `(#(status ,status-code) ,content))
+
+(defun response (status-code content headers)
+  (++ (response status-code content) headers))
+
+(defun error-resp (content)
+  (response (internal-server-error) content))
+
+(defun not-found-resp (content)
+  (response (not-found) content))
+
+(defun ok-resp (content)
+  (response (ok) content))
+
+;;; YAWS HTTP Plain Text Response Functions
+
+(defun text-content (data)
+  (content "text/plain" data))
+
+(defun text-created (message)
+  (response
+    (created)
+    (text-content message)))
+
+(defun text-created (message location)
+  (response
+    (created)
+    (text-content message)
+    (list (make-header 'location location))))
+
+(defun text-created ()
+  (text-created "created"))
+
+(defun text-updated (message)
+  (response
+    (ok)
+    (text-content message)))
+
+(defun text-updated ()
+  (text-updated "updated"))
+
+(defun text-deleted (message)
+  (response
+    (ok)
+    (text-content message)))
+
+(defun text-deleted ()
+  (text-deleted "deleted"))
+
+(defun text-error (status-code message)
+  (response
+    status-code
+    (text-content (++ "error :" message))))
+
+(defun text-error ()
+  (error
+    (internal-server-error)
+    "internal server error"))
+
+(defun text-not-found (message)
+  (error
+    (not-found)
+    message))
+
+(defun text-not-found ()
+  (text-not-found "not found"))
+
+(defun text-method-not-allowed ()
+  (error
+    (method-not-allowed)
+    "method not allowed"))
+
+(defun text-ok (content)
+  (ok (text-content content)))
+
+(defun text-ok ()
+  (ok "ok"))
+
+;;; YAWS HTTP HTML Response Functions
+
+(defun html-content (data)
+  (content "text/html" data))
+
+(defun html-not-found (html)
+  (not-found-resp (html-content html)))
+
+(defun html-ok (html)
+  (ok-resp (html-content html)))
+
+(defun error (status-code html)
+  (response
+    status-code
+    (html-content html)))
+
+;;; YAWS HTTP JSON Response Functions
+
+(defun json-content (data)
+  (lfest-resp:content "application/json" data))
+
+(defun json-result (data)
+  (json-content (++ "{\"result\": " data "}")))
+
+(defun json-text-result (text)
+  (json-content (++ "{\"result\": \"" text "\"}")))
+
+(defun json-created (message)
+  (response
+    (created)
+    (json-text-result message)))
+
+(defun json-created (message location)
+  (response
+    (created)
+    (json-text-result message)
+    (list (make-header 'location location))))
+
+(defun json-created ()
+  (json-created "created"))
+
+(defun json-updated (message)
+  (response
+    (ok)
+    (json-text-result message)))
+
+(defun json-updated ()
+  (json-updated "updated"))
+
+(defun json-deleted (message)
+  (response
+    (ok)
+    (json-text-result message)))
+
+(defun deleted ()
+  (json-deleted "deleted"))
+
+(defun json-error (status-code message)
+  (response
+    status-code
+    (json-result (++ "{\"error\": \"" message "\"}"))))
+
+(defun json-error ()
+  (json-error
+    (internal-server-error)
+    "internal server error"))
+
+(defun json-not-found (message)
+  (json-error
+    (not-found)
+    message))
+
+(defun json-not-found ()
+  (json-not-found "not found"))
+
+(defun json-method-not-allowed ()
+  (json-error
+    (method-not-allowed)
+    "method not allowed"))
+
+(defun json-ok (content)
+  (ok-resp (json-text-result content)))
+
+(defun json-ok ()
+  (json-ok "ok"))
+
+;;; HTTP Codes
 
 ; HTTP 1xx
 (defun continue () 100)
@@ -169,3 +348,4 @@
 (defun heartbleed () 795)
 (defun this-is-the-last-page-of-the-internet-go-back () 797)
 (defun end-of-the-world () 799)
+
