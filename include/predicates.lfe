@@ -1,7 +1,10 @@
-(defmacro defroutes body
-  `(defun routes ,@(rootes:compile-routes body)))
+(defmacro in (item collection)
+  `(orelse ,@(lists:map (lambda (x) `(=== ,x ,item)) collection)))
 
-(defun loaded-lrootes-routing ()
+(defmacro not-in (item collection)
+  `(not (in ,item ,collection)))
+
+(defun loaded-lrootes-predicates ()
   "This is just a dummy function for display purposes when including from the
   REPL (the last function loaded has its name printed in stdout).
 
