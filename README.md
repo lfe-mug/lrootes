@@ -1,8 +1,8 @@
-# lfest [![Build Status](https://travis-ci.org/lfex/lfest.png?branch=master)](https://travis-ci.org/lfex/lfest)
+# lrootes [![Build Status](https://travis-ci.org/lfex/lfest.png?branch=master)](https://travis-ci.org/lfex/lfest)
 
-<img src="resources/images/Banners-And-Confetti.png"/>
+<img src="resources/images/lrootes-x250.png"/>
 
-*Macros and functions for routing apps and services in LFE+Yaws*
+*Macros and functions for creating and composing routes for LFE YAWS web apps*
 
 
 Introduction
