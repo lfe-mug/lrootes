@@ -5,7 +5,23 @@
 *Macros and functions for creating, combining, and composing routes for LFE YAWS web apps*
 
 
-## Introduction
+##### Table of Contents
+
+* [Introduction](#introduction-)
+* [Dependences](#dependences-)
+* [Installtion](#installtion-)
+* [Usage](#usage-)
+  * [Simple Example](#simple-example-)
+  * [Combination Example](#combination-example-)
+  * [REST Service Example](#rest-service-example-)
+  * [YAWS Auth Example](#yaws-auth-example-)
+  * [Fine-grained Access Example](#fine-grained-access-example-)
+* [Concepts](#concepts-)
+  * [How It Works](#how-it-works-)
+  * [Behind the Scenes](#behind-the-scenes-)
+
+
+## Introduction [&#x219F;](#table-of-contents)
 
 Inspired by Clojure's [Compojure](https://github.com/weavejester/compojure)
 and based on the original LFE-YAWS routing
@@ -18,7 +34,7 @@ of data structures. The data strcutures represent an HTTP-verb+URL dispatch.
 This allows lrootes routes to be composed (since they are functions) and keeps
 the inner workings simple (because it's just ``iolist``s of tuples).
 
-## Dependencies
+## Dependencies [&#x219F;](#table-of-contents)
 
 This project assumes that you have Erlang, [rebar](https://github.com/rebar/rebar),
 and [lfetool]() installed somwhere in your ``$PATH``.
@@ -31,7 +47,7 @@ to the ``deps`` directory of this project when you run ``make compile``:
 * [YAWS](http://yaws.hyber.org/) - needed for an Erlang header file
 
 
-## Installation
+## Installation [&#x219F;](#table-of-contents)
 
 Just add it to your ``rebar.config`` deps:
 
@@ -57,9 +73,9 @@ $ make compile
 ```
 
 
-## Usage
+## Usage [&#x219F;](#table-of-contents)
 
-### Simple Example
+### Simple Example [&#x219F;](#table-of-contents)
 
 This shows bare minimum usage:
 
@@ -74,7 +90,7 @@ This shows bare minimum usage:
 (defapp (webapp))
 ```
 
-### Combination Example
+### Combination Example [&#x219F;](#table-of-contents)
 
 This shows a simple combination of routes:
 
@@ -153,9 +169,7 @@ use one of the threshing macros:
 (makeapp (order-api))
 ```
 
-
-
-### YAWS Auth Example
+### YAWS Auth Example [&#x219F;](#table-of-contents)
 
 With LFE releases 1.10.x and higher, you can define multiple modules in a
 single file, thus allowing you to provide multiple ``appmods`` in a single
@@ -166,16 +180,16 @@ are protected and those that are publicly accessible.
 TBD
 ```
 
-### grACL Fine-grained Access Example
+### Fine-grained Access Example [&#x219F;](#table-of-contents)
 
 ```lfe
 TBD
 ```
 
-## Concepts
+## Concepts [&#x219F;](#table-of-contents)
 
 
-### How It Works
+### How It Works [&#x219F;](#table-of-contents)
 
 A few important things to note here:
 
@@ -208,7 +222,7 @@ Notes for new library [this will be converted to content once implementation is 
   requires application modules to provide
 
 
-### Behind the Scenes
+### Behind the Scenes [&#x219F;](#table-of-contents)
 
 lfest needs to provide YAWS with an ``out/1`` function. The location of this
 function is configured in your ``etc/yaws.conf`` file in the
