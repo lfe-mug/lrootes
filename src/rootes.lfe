@@ -3,15 +3,15 @@
 
 (include-lib "lrootes/include/predicates.lfe")
 
-(defun check-segment
-  (((cons colon var-name)) (when (=:= colon #\:))
+(defun handle-segment
+  (((cons #\: var-name))
    (list_to_atom var-name))
   ((seg)
    seg))
 
 (defun parse-path (path-string)
   (lists:map
-   #'check-segment/1
+   #'handle-segment/1
    (string:tokens path-string "/")))
 
 (defun rebuild-head
@@ -34,3 +34,4 @@
 
 (defun compile-routes (forms)
   (lists:map #'split-params/1 forms))
+
