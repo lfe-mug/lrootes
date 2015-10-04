@@ -10,7 +10,7 @@ ifeq ($(OS),Darwin)
 HOST = $(shell scutil --get ComputerName)
 endif
 
-LIB = $(PROJECT)
+LIB = rootes
 DEPS = ./deps
 BIN_DIR = ./bin
 SOURCE_DIR = ./src
@@ -37,7 +37,7 @@ get-version:
 	@PATH=$(SCRIPT_PATH) $(LFETOOL) info version
 	@echo "Erlang/OTP, LFE, & library versions:"
 	@ERL_LIBS=$(ERL_LIBS) PATH=$(SCRIPT_PATH) erl \
-	-eval "lfe_io:format(\"~p~n\",['$(PROJECT)-util':'get-versions'()])." \
+	-eval "lfe_io:format(\"~p~n\",['$(LIB)-util':'get-versions'()])." \
 	-noshell -s erlang halt
 
 get-deps:
@@ -51,18 +51,21 @@ clean-ebin:
 clean-eunit:
 	-@PATH=$(SCRIPT_PATH) $(LFETOOL) tests clean
 
-compile: get-deps clean-ebin
+compile: get-deps clean-ebin compile-app-src
 	@echo "Compiling project code and dependencies ..."
 	@which rebar.cmd >/dev/null 2>&1 && \
 	PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) rebar.cmd compile || \
 	PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) rebar compile
 
-compile-no-deps: clean-ebin
+compile-no-deps: clean-ebin compile-app-src
 	@echo "Compiling only project code ..."
 	@which rebar.cmd >/dev/null 2>&1 && \
 	PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) \
 	rebar.cmd compile skip_deps=true || \
 	PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) rebar compile skip_deps=true
+
+compile-app-src:
+	cp src/$(PROJECT).app.src $(OUT_DIR)/$(PROJECT).app
 
 compile-tests: clean-eunit
 	@PATH=$(SCRIPT_PATH) ERL_LIBS=$(ERL_LIBS) $(LFETOOL) tests build
@@ -111,15 +114,3 @@ check-all: get-deps clean-eunit compile-no-deps
 check: check-unit-with-deps
 
 check-travis: $(LFETOOL) check
-
-push-all:
-	@echo "Pusing code to github ..."
-	git push --all
-	git push upstream --all
-	git push --tags
-	git push upstream --tags
-
-install: compile
-	@echo "Installing $(PROJECT) ..."
-	@PATH=$(SCRIPT_PATH) lfetool install lfe
-
