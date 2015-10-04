@@ -87,10 +87,10 @@
     "method not allowed"))
 
 (defun text-ok (content)
-  (ok (text-content content)))
+  (ok-resp (text-content content)))
 
 (defun text-ok ()
-  (ok "ok"))
+  (text-ok "ok"))
 
 ;;; YAWS HTTP HTML Response Functions
 
