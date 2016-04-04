@@ -1,9 +1,13 @@
-# lrootes [![Build Status](https://travis-ci.org/lfex/lrootes.png?branch=master)](https://travis-ci.org/lfex/lrootes)
+# lrootes 
 
-<img src="resources/images/lrootes-x250.png"/>
+[![][lrootes-logo]][lrootes-logo-large]
 
-*Macros and functions for creating, combining, and composing routes for LFE YAWS web apps*
+[lrootes-logo]: resources/images/lrootes-x250.png
+[lrootes-logo-large]: resources/images/lrootes-x1000.png
 
+*Macros and functions for creating, combining, and composing lmug routes*
+
+**WARNING**: This project is in high-flux and is awaiting further developments in the lmug library.
 
 ##### Table of Contents
 
@@ -26,7 +30,8 @@
 Inspired by Clojure's [Compojure](https://github.com/weavejester/compojure)
 and based on the original LFE-YAWS routing
 work done in the [lfest](https://github.com/lfex/lfest) project, lrootes
-improves upon its predecessor by focusing on route combination.
+improves upon its predecessor by focusing on route combination utilizing the same
+principles as the Compojure project, principally by integrating the work of lmug.
 
 lrootes accomplishes this by ensuring that routes are simply functions which
 return [iolists](http://erlang.org/doc/reference_manual/typespec.html#id77856)
@@ -34,17 +39,11 @@ of data structures. The data strcutures represent an HTTP-verb+URL dispatch.
 This allows lrootes routes to be composed (since they are functions) and keeps
 the inner workings simple (because it's just ``iolist``s of tuples).
 
+
 ## Dependencies [&#x219F;](#table-of-contents)
 
-This project assumes that you have Erlang, [rebar](https://github.com/rebar/rebar),
-and [lfetool]() installed somwhere in your ``$PATH``.
-
-This project depends upon the following, which are automatically installed
-to the ``deps`` directory of this project when you run ``make compile``:
-
-* [LFE](https://github.com/rvirding/lfe) - Lisp Flavored Erlang; needed to
-  compile
-* [YAWS](http://yaws.hyber.org/) - needed for an Erlang header file
+This project assumes that you have Erlang and [rebars](https://github.com/erlang/rebar3),
+and [lfetool]() 
 
 
 ## Installation [&#x219F;](#table-of-contents)
@@ -55,21 +54,14 @@ Just add it to your ``rebar.config`` deps:
 
 {deps, [
     ...
-    {lrootes, ".*", {git, "git@github.com:oubiwann/lrootes.git", "master"}}
+    {lrootes, ".*", {git, "git@github.com:lfe-mug/lrootes.git", "master"}}
   ]}.
 ```
 
-If you have created your project with ``lfetool``, you can download
-``lrootes`` with the following:
+Then:
 
 ```bash
-$ make get-deps
-```
-
-Or, you can have it download automatically when you compile:
-
-```bash
-$ make compile
+$ rebar3 compile
 ```
 
 
