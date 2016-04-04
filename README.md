@@ -5,7 +5,7 @@
 [lrootes-logo]: resources/images/lrootes-x250.png
 [lrootes-logo-large]: resources/images/lrootes-x1000.png
 
-*Macros and functions for creating, combining, and composing lmug routes*
+*Macros and functions for creating, combining, and composing routes for lmug apps*
 
 **WARNING**: This project is in high-flux and is awaiting further developments in the lmug library.
 
