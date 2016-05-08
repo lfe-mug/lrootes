@@ -1,13 +1,11 @@
-# lrootes
+# lrootes [![Build Status][travis-badge]][travis]
 
-[![][lrootes-logo]][lrootes-logo-large]
-
-[lrootes-logo]: priv/images/lrootes-x250.png
-[lrootes-logo-large]: priv/images/lrootes-x1000.png
+[![lrootes project logo][logo]][logo-large]
 
 *Macros and functions for creating, combining, and composing routes for lmug apps*
 
 **WARNING**: This project is in high-flux and is awaiting further developments in the lmug library.
+
 
 ##### Table of Contents
 
@@ -266,3 +264,12 @@ a ``.beam``:
 
 When it is compiled, the ``routes/3`` function is available for use from
 wherever you have defined your routes.
+
+
+<!-- Named page links below: /-->
+
+[travis]: https://travis-ci.org/lfe-mug/lrootes
+[travis-badge]: https://travis-ci.org/lfe-mug/lrootes.png?branch=master
+[logo]: priv/images/lrootes-x250.png
+[logo-large]: priv/images/lrootes-x1000.png
+
