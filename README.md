@@ -1,9 +1,9 @@
-# lrootes 
+# lrootes
 
 [![][lrootes-logo]][lrootes-logo-large]
 
-[lrootes-logo]: resources/images/lrootes-x250.png
-[lrootes-logo-large]: resources/images/lrootes-x1000.png
+[lrootes-logo]: priv/images/lrootes-x250.png
+[lrootes-logo-large]: priv/images/lrootes-x1000.png
 
 *Macros and functions for creating, combining, and composing routes for lmug apps*
 
@@ -43,7 +43,7 @@ the inner workings simple (because it's just ``iolist``s of tuples).
 ## Dependencies [&#x219F;](#table-of-contents)
 
 This project assumes that you have Erlang and [rebars](https://github.com/erlang/rebar3),
-and [lfetool]() 
+and [lfetool]()
 
 
 ## Installation [&#x219F;](#table-of-contents)
@@ -124,7 +124,7 @@ use one of the threshing macros:
 (makeapp (-> (webapp)
              (api)))
 ```
-            
+
 ### REST Service Example
 
 ```lfe
